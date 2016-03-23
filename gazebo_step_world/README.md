@@ -1,0 +1,1 @@
+This snippet demonstrates how to use a Gazebo message to control when to step the world.  Change the duration of the sleep command in the OnUpdate function to adjust how often the world will be advanced by one step.
