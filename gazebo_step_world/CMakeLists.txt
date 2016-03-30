@@ -11,8 +11,5 @@ endif()
 include_directories(${GAZEBO_INCLUDE_DIRS})
 link_directories(${GAZEBO_LIBRARY_DIRS})
 
-add_library(world_edit SHARED world_edit.cc)
-target_link_libraries(world_edit ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES})
-
 add_library(world_step SHARED world_step.cc)
 target_link_libraries(world_step ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES})
