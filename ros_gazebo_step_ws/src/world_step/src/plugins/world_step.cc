@@ -39,6 +39,7 @@ namespace gazebo
       // Initialize the node with the world name
       this->node->Init(_parent->GetName());
 
+      std::cout <<_parent->GetName() << std::endl;
       // Create a publisher
       this->pub = this->node->Advertise<msgs::WorldControl>("~/world_control");
 
