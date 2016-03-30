@@ -16,7 +16,7 @@
       </camera>
     </gui>
 
-  <plugin name="world_step" filename="libworld_step.so"/>
+  <!--<plugin name="world_step" filename="libworld_step.so"/>-->
  
   </world>
 </sdf>
