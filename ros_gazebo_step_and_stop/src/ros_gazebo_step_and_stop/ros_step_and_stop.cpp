@@ -20,11 +20,18 @@ int main(int argc, char** argv)
   gazebo::transport::NodePtr node(new gazebo::transport::Node());
   node->Init();
 
+  // Gazebo ServerControl Topic
+  gazebo::transport::NodePtr serverNode(new gazebo::transport::Node());
+  serverNode->Init();
+
   // Initialize the ROSNode
   ros::NodeHandle* rosnode = new ros::NodeHandle();
     
+  // Gazebo Publishers
   gazebo::transport::PublisherPtr pub = node->Advertise<gazebo::msgs::WorldControl>("~/world_control");
   
+  gazebo::transport::PublisherPtr serverPub = serverNode->Advertise<gazebo::msgs::ServerControl>("/gazebo/server/control");
+
   // Waits for simulation time update.
   ros::Time last_ros_time_;
   bool wait = true;
@@ -48,7 +55,12 @@ int main(int argc, char** argv)
     ros::spinOnce();
   }
 
-  gazebo::shutdown();
+  // Send a server control shutdown message.
+  gazebo::msgs::ServerControl serverMsg;
+  serverMsg.set_stop(1);
+  serverPub->Publish(serverMsg);
+
+  //gazebo::shutdown();
 
   return 0;
 }
