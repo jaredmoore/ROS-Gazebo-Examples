@@ -1,0 +1,43 @@
+<launch>
+  <arg name="paused" default="true"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="world_name" default="$(find firstbot_gazebo)/worlds/firstbot_world.world"/> 
+
+  <!-- set use_sim_time flag -->
+  <group if="$(arg use_sim_time)">
+    <param name="/use_sim_time" value="true" />
+  </group>
+
+  <!-- set command arguments -->
+  <arg unless="$(arg paused)" name="command_arg1" value=""/>
+  <arg     if="$(arg paused)" name="command_arg1" value="-u"/>
+  <arg unless="$(arg headless)" name="command_arg2" value=""/>
+  <arg     if="$(arg headless)" name="command_arg2" value="-r"/>
+  <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
+  <arg     if="$(arg debug)" name="script_type" value="debug"/>
+  
+<!--  <node name="ros_step_and_stop_1" pkg="ros_gazebo_step_and_stop" type="ros_step_and_stop" output="screen" required="true"/-->
+
+  <!-- start gazebo server-->
+  <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="false" output="log"
+	args="$(arg command_arg1) $(arg command_arg2) $(arg world_name)" />
+	
+  <!-- start gazebo client -->
+  <group if="$(arg gui)">
+    <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="log"/>
+  </group>
+
+  <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find firstbot_description)/urdf/firstbot.xacro'" />
+
+<!-- push robot_description to factory and spawn robot in gazebo -->
+<node name="firstbot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+ args="-urdf -param robot_description -model firstbot" />
+<node name="firstbot_ball_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+ args="-urdf -param robot_description -model firstbot_ball" />
+
+</launch>
+

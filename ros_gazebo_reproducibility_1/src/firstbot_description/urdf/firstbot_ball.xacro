@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot name="firstbot_ball" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="PI" value="3.1415926535897931"/>
+
+  <xacro:property name="sphereRadius" value="0.5" />
+
+  <xacro:property name="ballStartY" value="3.0" />
+  <xacro:property name="ballStartZ" value="0" />
+  <xacro:property name="ballRadius" value="0.75" />
+
+  <xacro:include filename="$(find firstbot_description)/urdf/firstbot.gazebo" />
+  <xacro:include filename="$(find firstbot_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find firstbot_description)/urdf/macros.xacro" />
+
+  <link name="footprint_ball" />
+
+  <joint name="ball_joint" type="fixed">
+    <parent link="footprint_ball"/>
+    <child link="ball"/>
+  </joint>
+  
+  <link name="ball">
+    <collision>
+      <origin xyz="0 ${ballStartZ} ${ballStartY}" rpy="0 0 0 "/>
+      <geometry>
+        <sphere radius="${ballRadius}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 ${ballStartZ} ${ballStartY}" rpy="0 0 0 "/>
+      <geometry>
+        <sphere radius="${ballRadius}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <origin xyz="0 ${ballStartZ} ${ballStartY}" rpy="0 0 0 "/>
+      <mass value="0.5" />
+      <sphere_inertia m="0.5" r="${ballRadius}" />
+    </inertial>
+  </link>
+</robot>
+

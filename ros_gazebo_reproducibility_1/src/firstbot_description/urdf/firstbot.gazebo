@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<robot>
+<gazebo reference="base_box">
+  <material>Gazebo/Orange</material>
+</gazebo>
+<gazebo reference="ball">
+  <material>Gazebo/Black</material>
+</gazebo>
+</robot>

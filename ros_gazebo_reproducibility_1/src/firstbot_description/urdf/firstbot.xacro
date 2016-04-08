@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot name="firstbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="PI" value="3.1415926535897931"/>
+
+  <xacro:property name="boxDims" value="0.3" />
+  <xacro:include filename="$(find firstbot_description)/urdf/firstbot.gazebo" />
+  <xacro:include filename="$(find firstbot_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find firstbot_description)/urdf/macros.xacro" />
+
+  <link name="footprint" />
+
+  <joint name="base_joint" type="fixed">
+    <parent link="footprint"/>
+    <child link="base_box"/>
+  </joint>
+
+  <link name='base_box'>
+    <collision> 
+      <origin xyz="0 ${boxDims/2.0} ${boxDims/2.0}" rpy="0 0 0"/> 
+      <geometry> 
+        <box size="${boxDims} ${boxDims} ${boxDims}"/> 
+      </geometry> 
+    </collision>
+    <visual> 
+      <origin xyz="0 ${boxDims/2.0} ${boxDims/2.0}" rpy="0 0 0"/> 
+      <geometry> 
+        <box size="${boxDims} ${boxDims} ${boxDims}"/> 
+      </geometry> 
+      <material name="orange"/>
+    </visual>
+    <inertial> 
+      <origin xyz="0 ${boxDims/2.0} ${boxDims/2.0}" rpy="0 0 0"/> 
+      <mass value="1.0"/> 
+      <box_inertia m="1.0" x="${boxDims}" y="${boxDims}" z="${boxDims}"/>
+    </inertial>
+  </link>
+</robot>
