@@ -19,11 +19,11 @@
   <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
   <arg     if="$(arg debug)" name="script_type" value="debug"/>
   
-<!--  <node name="ros_step_and_stop_1" pkg="ros_gazebo_step_and_stop" type="ros_step_and_stop" output="screen" required="true"/-->
-
+  <node name="ros_step_and_stop_1" pkg="ros_gazebo_step_and_stop" type="ros_step_and_stop" output="screen" required="true"/>
+  
   <!-- start gazebo server-->
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="false" output="log"
-	args="$(arg command_arg1) $(arg command_arg2) $(arg world_name)" />
+	args="$(arg command_arg1) $(arg command_arg2) $(arg world_name) --seed=1" />
 	
   <!-- start gazebo client -->
   <group if="$(arg gui)">
@@ -31,13 +31,12 @@
   </group>
 
   <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
-  <param name="robot_description" command="$(find xacro)/xacro.py '$(find firstbot_description)/urdf/firstbot.xacro'" />
+  <param name="box_description" command="$(find xacro)/xacro.py '$(find firstbot_description)/urdf/firstbot.xacro'" />
+  <param name="ball_description" command="$(find xacro)/xacro.py '$(find firstbot_description)/urdf/firstbot_ball.xacro'" />
 
-<!-- push robot_description to factory and spawn robot in gazebo -->
-<node name="firstbot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
- args="-urdf -param robot_description -model firstbot" />
-<node name="firstbot_ball_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
- args="-urdf -param robot_description -model firstbot_ball" />
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="firstbot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param box_description -model firstbot" />
+  <node name="firstbot_ball_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param ball_description -model firstbot_ball" />
 
 </launch>
 
